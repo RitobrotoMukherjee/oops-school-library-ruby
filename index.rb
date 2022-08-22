@@ -2,7 +2,7 @@ require './person'
 require './student'
 require './teacher'
 
-person1 = Person.new(10, 'Test', parent_permission: true)
+person1 = Person.new(10, 'Test', parent_permission: false)
 
 person2 = Person.new(27, 'Rito', parent_permission: true)
 
