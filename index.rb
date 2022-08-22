@@ -1,11 +1,14 @@
-require_relative 'person'
-require_relative 'student'
+require './person'
+require './student'
+require './teacher'
 
 person1 = Person.new(10, 'Test', parent_permission: true)
 
 person2 = Person.new(27, 'Rito', parent_permission: true)
 
 student = Student.new(1, 25, 'Mukherjee', parent_permission: true)
+
+teacher = Teacher.new('English', 35, 'Mr. Robot', parent_permission: true)
 
 puts "\nPerson 1 details:\n"
 puts person1.id
@@ -24,6 +27,13 @@ puts person2.can_use_services?
 puts "\nStudents details:\n"
 puts student.id
 puts student.name
-puts student.can_use_services?
 puts student.classroom
 puts student.play_hooky
+puts student.can_use_services?
+
+puts "\nTechers details:\n"
+puts teacher.id
+puts teacher.name
+puts teacher.age
+puts teacher.specialization
+puts teacher.can_use_services?
