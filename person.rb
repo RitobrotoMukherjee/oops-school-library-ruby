@@ -11,7 +11,7 @@ class Person
   end
 
   def can_use_services?
-    return true if @permission and is_of_age?
+    return true if @permission and of_age?
 
     false
   end
