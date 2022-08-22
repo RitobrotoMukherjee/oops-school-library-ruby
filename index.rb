@@ -6,7 +6,7 @@ person1 = Person.new(10, 'Test', parent_permission: false)
 
 person2 = Person.new(27, 'Rito', parent_permission: true)
 
-student = Student.new(1, 25, 'Mukherjee', parent_permission: true)
+student = Student.new(1, 15, 'Mukherjee', parent_permission: true)
 
 teacher = Teacher.new('English', 35, 'Mr. Robot', parent_permission: true)
 
