@@ -1,6 +1,8 @@
-require './person'
-require './student'
-require './teacher'
+require './classes/person'
+require './classes/student'
+require './classes/teacher'
+require './decorators/capitalize_decorator'
+require './decorators/trimmer_decorator'
 
 person1 = Person.new(10, 'Test', parent_permission: false)
 
@@ -10,7 +12,15 @@ student = Student.new(1, 15, 'Mukherjee', parent_permission: true)
 
 teacher = Teacher.new('English', 35, 'Mr. Robot', parent_permission: true)
 
-puts "\nPerson 1 details:\n"
+puts "\n\nDecorators:"
+person = Person.new(22, 'maximilianus')
+puts person.correct_name
+capitalizedPerson = CapitalizeDecorator.new(person)
+puts capitalizedPerson.correct_name
+capitalizedTrimmedPerson = TrimmerDecorator.new(capitalizedPerson)
+puts capitalizedTrimmedPerson.correct_name
+
+puts "\n\nPerson 1 details:\n"
 puts person1.id
 puts person1.name
 puts person1.age
@@ -37,3 +47,5 @@ puts teacher.name
 puts teacher.age
 puts teacher.specialization
 puts teacher.can_use_services?
+
+
