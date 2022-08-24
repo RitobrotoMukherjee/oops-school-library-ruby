@@ -37,7 +37,34 @@ puts "\nList of students in #{class2.label}"
 student_list = class2.students.map { |student| student.name }
 p student_list
 
-puts "\nRelationships Person, Book & Rentals:"
+puts "\n\nRelationships Person, Book & Rentals:"
+person1 = Person.new(18, 'Ritobroto', parent_permission: false)
+person2 = Person.new(27, 'Queeen', parent_permission: true)
+
+book1 = Book.new('Nuclear Family', 'Joseph Han')
+book2 = Book.new('The Angel of Rome', 'Jess Walter')
+
+puts "\nInitital Total rentals of #{book1.title} = #{book1.rentals.count}"
+puts "\nInitital Total rentals of #{book2.title} = #{book2.rentals.count}"
+rental1 = Rental.new('24-08-2022', person1, book1)
+rental2 = Rental.new('21-07-2022', person2, book1)
+rental3 = Rental.new('21-07-2022', person1, book2)
+
+puts "\n#{person1.name} has rented total books = #{person1.rentals.count}"
+puts "\n#{person2.name} has rented total books = #{person2.rentals.count}"
+
+puts "\n#{person1.name} rented book list:"
+rental_details = ''
+person1.rentals.each_with_index { |rental, i| rental_details += "\n#{i + 1} => #{rental.full_date}: #{rental.book.title} by #{rental.book.author}" }
+puts rental_details
+
+rental_details = ''
+puts "\n#{person2.name} rented book list:"
+person2.rentals.each_with_index { |rental, i| rental_details += "\n#{i + 1} => #{rental.full_date}: #{rental.book.title} by #{rental.book.author}" }
+puts rental_details
+
+puts "\nFinally Total rentals of #{book1.title} = #{book1.rentals.count}"
+puts "\nFinally Total rentals of #{book2.title} = #{book2.rentals.count}"
 
 # puts "\n\nDecorators:"
 # person = Person.new(22, 'maximilianus')

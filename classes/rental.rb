@@ -1,3 +1,5 @@
+require 'date'
+
 class Rental
   attr_reader :person, :book, :full_date
 
@@ -9,9 +11,9 @@ class Rental
     @full_date = Date.parse(@date).strftime('%a %d %b %Y')
 
     @person = person
-    person.rentals.push(person)
+    person.rentals.push(self)
 
     @book = book
-    book.rentals.push(book)
+    book.rentals.push(self)
   end
 end
