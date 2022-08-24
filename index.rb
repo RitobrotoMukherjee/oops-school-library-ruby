@@ -1,11 +1,13 @@
 require './classes/person'
+require './classes/book'
+require './classes/rental'
 require './classes/student'
 require './classes/teacher'
 require './classes/classroom'
 require './decorators/capitalize_decorator'
 require './decorators/trimmer_decorator'
 
-puts "\nRelationships:"
+puts "\nRelationships Students & Classroom:"
 
 rito = Student.new('Class 1', 18, 'Rito')
 queen = Student.new('Class 1', 21, 'Queen')
@@ -14,8 +16,8 @@ sayantani = Student.new('Class 2', 22, 'Sayantani')
 class1 = Classroom.new('Class 1')
 class2 = Classroom.new('Class 2')
 
-puts "\n#{class1.label} details:"
-puts "\n\n#{class1.label} students count: #{class1.students.count}"
+puts "\n\n#{class1.label} details:"
+puts "\nInitial #{class1.label} students count: #{class1.students.count}"
 class1.add_student(rito)
 class1.add_student(queen)
 puts "\nAfter #{rito.name} and #{queen.name} adding Students - count: #{class1.students.count}"
@@ -26,14 +28,16 @@ puts "\nList of students in #{class1.label}"
 student_list = class1.students.map { |student| student.name }
 p student_list
 
-
-puts "\n\n#{class2.label} students count: #{class2.students.count}"
+puts "\n\n#{class2.label} details:"
+puts "\nInitial #{class2.label} students count: #{class2.students.count}"
 class2.add_student(sayantani)
 puts "\nAfter adding #{sayantani.name} Students - count: #{class2.students.count}"
 puts "\n#{sayantani.name} is in - #{sayantani.classroom.label}"
 puts "\nList of students in #{class2.label}"
 student_list = class2.students.map { |student| student.name }
 p student_list
+
+puts "\nRelationships Person, Book & Rentals:"
 
 # puts "\n\nDecorators:"
 # person = Person.new(22, 'maximilianus')
