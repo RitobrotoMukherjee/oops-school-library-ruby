@@ -1,3 +1,4 @@
+require './classes/options'
 require './classes/person'
 require './classes/book'
 require './classes/rental'
@@ -5,11 +6,33 @@ require './classes/student'
 require './classes/teacher'
 require './classes/classroom'
 require './decorators/capitalize_decorator'
-require './decorators/trimmer_decorator'
 
-class App
-  # all code for console ui here
-  def run; end
+class App < options
+
+  def initialize()
+    super()
+    puts 'Welcome to School Library App!'
+    @people = []
+    @books = []
+    @rentals = []
+  end
+
+  def list_books
+    text = ''
+    @books.each.with_index(1) do |book, i|
+      text += "\n#{i}) Title: \"#{book.title}\" Author: #{book.author}"
+    end
+    text
+  end
+
+  def list_people
+    text = ''
+    @people.each do |person|
+      type = person.instance_of?(Student) ? 'Student' : 'Teacher'
+      text += "\n[#{type}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
+    end
+    text
+  end
 end
 
 puts "\nRelationships Students & Classroom:"
