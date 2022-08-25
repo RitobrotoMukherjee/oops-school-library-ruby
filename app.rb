@@ -8,7 +8,6 @@ require './classes/classroom'
 require './decorators/capitalize_decorator'
 
 class App < Options
-
   def initialize()
     super()
     puts 'Welcome to School Library App!'
@@ -29,6 +28,7 @@ class App < Options
 
   def list_people
     return 'No person had been added to the library' unless @people.any?
+
     text = ''
     @people.each do |person|
       type = person.instance_of?(Student) ? 'Student' : 'Teacher'
@@ -38,19 +38,28 @@ class App < Options
   end
 
   def create_person(option)
-
-    name = get_input_with_label('Name')
-    age = get_input_with_label('Age').to_i
+    name = take_input_with_label('Name')
+    age = take_input_with_label('Age').to_i
 
     case option
     when 1
-      specialization = get_input_with_label('Specialization')
+      specialization = take_input_with_label('Specialization')
       @people << Teacher.new(specialization, age, name)
       puts 'Teacher Created Successfully'
     when 2
-      permission = %w[y Y].include?(get_input_with_label('Has parent permission? [Y/N]'))
+      permission = %w[y Y].include?(take_input_with_label('Has parent permission? [Y/N]'))
       @people << Student.new(age, name, permission)
       puts 'Student Created Successfully'
     end
   end
+
+  def create_book
+    title = take_input_with_label('Title')
+    author = take_input_with_label('Author')
+
+    @books << Book.new(title, author)
+    puts 'Book Created Successfully'
+  end
+
+  def create_rental; end
 end
