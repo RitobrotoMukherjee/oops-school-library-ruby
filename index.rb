@@ -7,6 +7,12 @@ require './classes/classroom'
 require './decorators/capitalize_decorator'
 require './decorators/trimmer_decorator'
 
+class App
+  # all code for console ui here
+  def run()
+  end
+end
+
 puts "\nRelationships Students & Classroom:"
 
 rito = Student.new('Class 1', 18, 'Rito')
