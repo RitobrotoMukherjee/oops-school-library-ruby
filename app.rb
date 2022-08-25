@@ -9,8 +9,7 @@ require './decorators/trimmer_decorator'
 
 class App
   # all code for console ui here
-  def run()
-  end
+  def run; end
 end
 
 puts "\nRelationships Students & Classroom:"
