@@ -5,7 +5,7 @@ def main()
   input = nil
 
   while input != 7
-    app.options
+    app.main_options
     input = app.get_input
 
     case input
@@ -15,8 +15,14 @@ def main()
 
     when 2
         puts "\n#{app.list_people}"
+
+    when 3
+        option = app.person_get_option
+        app.create_person(option) unless option.is_a? String
+        puts option if option.is_a? String
+
     else
-        puts input
+        puts input unless input == 7
     end
   end
 
