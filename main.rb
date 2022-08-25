@@ -1,5 +1,6 @@
 # rubocop:disable Metrics/MethodLength
 # rubocop:disable Metrics/CyclomaticComplexity
+# rubocop:disable Metrics/PerceivedComplexity
 
 require_relative 'app'
 
@@ -26,8 +27,11 @@ def main()
     when 4
       app.create_book
     when 5
-      app.create_rental
+      app.create_rental if app.rentable?
 
+    when 6
+      person_id = app.take_person_id
+      app.print_rentals(person_id) if person_id.is_a? Integer
     else
       puts input unless input == 7
     end
@@ -40,3 +44,4 @@ main
 
 # rubocop:enable Metrics/MethodLength
 # rubocop:enable Metrics/CyclomaticComplexity
+# rubocop:enable Metrics/PerceivedComplexity
