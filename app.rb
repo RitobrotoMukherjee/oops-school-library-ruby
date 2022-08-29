@@ -1,13 +1,9 @@
 require_relative 'module/options'
 require_relative 'module/take_input'
-require_relative 'controllers/book'
 require_relative 'classes/book'
-require './classes/person'
-require './classes/rental'
-require './classes/student'
-require './classes/teacher'
-require './classes/classroom'
-require './decorators/capitalize_decorator'
+require_relative 'classes/teacher'
+require_relative 'classes/student'
+require_relative 'classes/rental'
 
 class App
   attr_reader :books, :people, :rentals
@@ -16,14 +12,14 @@ class App
 
   include TakeInput
 
-  def initialize(book_controller, person_controller, _rental_controller)
+  def initialize(book_controller, person_controller, rental_controller)
     @people = []
     @books = []
     @rentals = []
 
     @book_controller = book_controller
-    @person_instance = person_controller
-    @rental_instance = nil
+    @person_controller = person_controller
+    @rental_controller = rental_controller
   end
 
   def list_books
@@ -37,7 +33,7 @@ class App
   end
 
   def list_people
-    @person_instance.list(@people)
+    @person_controller.list(@people)
   end
 
   def create_person(option)
@@ -47,10 +43,10 @@ class App
     case option
     when 1
       specialization = take_input_with_label('Specialization')
-      @person_instance.create(self, Teacher.new(specialization, age, name), 'Teacher Created Successfully')
+      @person_controller.create(self, Teacher.new(specialization, age, name), 'Teacher Created Successfully')
     when 2
       permission = %w[y Y].include?(take_input_with_label('Has parent permission? [Y/N]'))
-      @person_instance.create(self, Student.new(age, name, permission), 'Student Created Successfully')
+      @person_controller.create(self, Student.new(age, name, permission), 'Student Created Successfully')
     end
   end
 
@@ -58,7 +54,7 @@ class App
     case type
     when 'book'
       puts "\nSelect a book from the following list by number"
-      puts book_controller.list(@books)
+      puts @book_controller.list(@books)
       book = take_input_with_label('Book number').to_i
       return puts 'Invalid book selection!' unless book.between?(1, @books.length)
 
@@ -66,7 +62,7 @@ class App
 
     when 'person'
       puts "\nSelect a person from the following list by number (not ID)"
-      puts @person_instance.list(@people, indexed: true)
+      puts @person_controller.list(@people, indexed: true)
       person = take_input_with_label('Person number').to_i
       return puts 'Invalid person selection!' unless person.between?(1, @people.length)
 
@@ -83,30 +79,18 @@ class App
 
     puts 'Enter a date'
     date = take_input_with_label('Date, "DD-MM-YYYY"')
-    @rentals << Rental.new(date, person, book)
-    puts 'Rental Created Successfully!'
+    @rental_controller.create(self, Rental.new(date, person, book))
   end
 
   def rentable?
-    puts 'Either books or people is empty. Please add one of each' if @people.empty? || @books.empty?
-    !@people.empty? && !@books.empty?
+    @rental_controller.rentable?(@books, @people)
   end
 
-  def take_person_id
+  def print_rentals
     return puts 'No rentals available to check. First create a Rental' if @rentals.empty?
 
     puts 'Enter Person ID to find rentals:'
-    take_input_with_label('Person ID').to_i
-  end
-
-  def print_rentals(person_id)
-    return puts 'No rentals available to check. First create a Rental' if @rentals.empty?
-
-    person = @people.find { |per| per.id == person_id }
-    return puts "No rentals found for Person Id: #{person_id}" if person.nil?
-
-    person.rentals.each do |rental|
-      puts "\nDate: #{rental.full_date}, Book: \"#{rental.book.title}\" by #{rental.book.author}"
-    end
+    person_id = take_input_with_label('Person ID').to_i
+    @rental_controller.list(@rentals, @people, person_id)
   end
 end

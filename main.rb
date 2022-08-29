@@ -34,8 +34,7 @@ def main(app)
       app.create_rental if app.rentable?
 
     when 6
-      person_id = app.take_person_id
-      app.print_rentals(person_id) if person_id.is_a? Integer
+      app.print_rentals
     else
       puts input unless input == 7
     end
