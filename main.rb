@@ -4,8 +4,7 @@
 
 require_relative 'app'
 
-def main()
-  app = App.new
+def main(app)
   input = nil
 
   while input != 7
@@ -40,7 +39,9 @@ def main()
   return puts "\nGoodBye" if input == 7
 end
 
-main
+app = App.new
+
+main app
 
 # rubocop:enable Metrics/MethodLength
 # rubocop:enable Metrics/CyclomaticComplexity
