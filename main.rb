@@ -3,6 +3,9 @@
 # rubocop:disable Metrics/PerceivedComplexity
 
 require_relative 'app'
+require_relative 'controllers/book'
+require_relative 'controllers/person'
+require_relative 'controllers/rental'
 
 def main(app)
   puts 'Welcome to School Library CLI App by Ritobroto Mukherjee'
@@ -22,7 +25,7 @@ def main(app)
 
     when 3
       app.person_get_option
-      option = app.take_input(Options::PEOPLE_MENU_RANGE, "Cannot create person")
+      option = app.take_input(Options::PEOPLE_MENU_RANGE, 'Cannot create person')
       app.create_person(option) unless option.is_a? String
       puts option if option.is_a? String
     when 4
@@ -41,7 +44,7 @@ def main(app)
   return puts "\nGoodBye" if input == 7
 end
 
-app = App.new
+app = App.new(BookController.new, PersonController.new, RentalController.new)
 
 main app
 
