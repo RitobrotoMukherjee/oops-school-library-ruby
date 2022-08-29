@@ -1,4 +1,5 @@
-require './classes/options'
+require_relative 'module/options'
+require_relative 'module/take_input'
 require './classes/person'
 require './classes/book'
 require './classes/rental'
@@ -7,10 +8,12 @@ require './classes/teacher'
 require './classes/classroom'
 require './decorators/capitalize_decorator'
 
-class App < Options
+class App
+  include Options
+
+  include TakeInput
+
   def initialize()
-    super()
-    puts 'Welcome to School Library App!'
     @people = []
     @books = []
     @rentals = []

@@ -5,11 +5,12 @@
 require_relative 'app'
 
 def main(app)
+  puts 'Welcome to School Library CLI App by Ritobroto Mukherjee'
   input = nil
 
   while input != 7
     app.main_options
-    input = app.take_input
+    input = app.take_input(Options::MAIN_MENU_RANGE)
 
     case input
 
@@ -20,7 +21,8 @@ def main(app)
       puts "\n#{app.list_people}"
 
     when 3
-      option = app.person_get_option
+      app.person_get_option
+      option = app.take_input(Options::PEOPLE_MENU_RANGE, "Cannot create person")
       app.create_person(option) unless option.is_a? String
       puts option if option.is_a? String
     when 4
