@@ -6,6 +6,13 @@ require_relative 'app'
 require_relative 'controllers/book'
 require_relative 'controllers/person'
 require_relative 'controllers/rental'
+require_relative 'controllers/json_io_controller'
+
+JSON_IO = JsonIOController.new('books.json', 'people.json', 'rentals.json')
+
+BOOK_CONTROLLER = BookController.new(JSON_IO)
+PERSON_CONTROLLER = PersonController.new(JSON_IO)
+RENTAL_CONTROLLER = RentalController.new(JSON_IO)
 
 def main(app)
   puts 'Welcome to School Library CLI App by Ritobroto Mukherjee'

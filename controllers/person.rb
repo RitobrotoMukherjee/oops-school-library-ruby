@@ -1,8 +1,8 @@
+require_relative 'base_controller'
 require_relative '../classes/person'
-require_relative '../interfaces/base'
 require_relative '../classes/student'
 
-class PersonController < Base
+class PersonController < BaseController
   def list(people, indexed: false)
     return 'No person had been added to the library' unless people.any?
 
@@ -19,7 +19,7 @@ class PersonController < Base
     text
   end
 
-  def create(app, person, message)
+  def create(app, person, message = '')
     app.people << person
     puts message
   end

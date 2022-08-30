@@ -12,18 +12,16 @@ class App
 
   include TakeInput
 
-  def initialize(book_controller, person_controller, rental_controller)
+  def initialize(person_controller, rental_controller)
     @people = []
-    @books = []
     @rentals = []
 
-    @book_controller = book_controller
     @person_controller = person_controller
     @rental_controller = rental_controller
   end
 
   def list_books
-    @book_controller.list(@books)
+    @book_controller.list
   end
 
   def create_book

@@ -1,7 +1,7 @@
+require_relative 'base_controller'
 require_relative '../classes/rental'
-require_relative '../interfaces/base'
 
-class RentalController < Base
+class RentalController < BaseController
   def list(rentals, people, person_id)
     return puts 'No rentals available to check. First create a Rental' if rentals.empty?
 

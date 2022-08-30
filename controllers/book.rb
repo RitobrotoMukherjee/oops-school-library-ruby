@@ -1,8 +1,9 @@
 require_relative '../classes/book'
-require_relative '../interfaces/base'
+require_relative 'base_controller'
 
-class BookController < Base
-  def list(books)
+class BookController < BaseController
+  def list
+    books = iostream.read('books')
     return 'No books added to the library' unless books.any?
 
     text = ''
