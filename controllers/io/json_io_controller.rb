@@ -1,19 +1,17 @@
-require_relative '../../interfaces/io'
+require 'json'
 require_relative '../../module/create_io_files'
 
-class JsonIOController < IO
+class JsonIOController
   include CreateIOFiles
 
-  def initialize(*files)
-    super()
-    files.each { |file| CreateIOFiles.create_json_file(file) }
+  def read(file)
+    data = []
+    data = JSON.parse(read_file(file, 'data')) if check_file(file, 'data') && read_file(file, 'data') != ''
+    data
   end
 
-  def read(_file)
-    []
-  end
-
-  def write(file, _data)
-    puts "\nSuccessfully written to #{file}.json"
+  def write(file, data)
+    write_file(file, 'data', JSON.generate(data))
+    puts "\nSuccessfully written to #{file}"
   end
 end

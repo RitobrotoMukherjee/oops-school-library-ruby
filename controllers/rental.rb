@@ -1,5 +1,5 @@
 require_relative 'base_controller'
-require_relative '../classes/rental'
+require_relative '../models/rental'
 
 class RentalController < BaseController
   def list(rentals, people, person_id)

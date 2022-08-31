@@ -1,19 +1,24 @@
 require_relative '../interfaces/base'
 
 class BaseController < Base
-  attr_reader :iostream
+  attr_reader :iostream, :file
 
   # iostream can be JSON/MySQL/Postgres etc
-  def initialize(iostream)
+  def initialize(iostream, file_name)
     super()
     @iostream = iostream
+    @file_name = file_name
   end
 
-  def list(_data = [])
-    puts "\nData is empty"
+  def print
+    puts "\nCannot Print Data"
   end
 
-  def create(_app, _inst)
+  def create
     puts "\nNothing to create"
+  end
+
+  def list
+    puts "\nData is empty"
   end
 end

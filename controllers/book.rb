@@ -1,10 +1,12 @@
-require_relative '../classes/book'
+require_relative '../models/book'
 require_relative 'base_controller'
 
 class BookController < BaseController
-  def list
-    books = iostream.read('books')
-    return 'No books added to the library' unless books.any?
+  def print
+    data_list = @iostream.read(@file_name)
+    return 'No books added to the library' unless data_list.any?
+
+    books = data_list.map { |book| Book.new(book['title'], book['author']) }
 
     text = ''
     books.each.with_index(1) do |book, i|
@@ -13,8 +15,17 @@ class BookController < BaseController
     text
   end
 
-  def create(app, book)
-    app.books << book
+  def create(book)
+    books = @iostream.read(@file_name)
+    books << { title: book.title, author: book.author }
+    @iostream.write(@file_name, books)
     puts 'Book Created Successfully'
+  end
+
+  def list
+    data_list = @iostream.read(@file_name)
+    return 'No books added to the library' unless data_list.any?
+
+    data_list
   end
 end

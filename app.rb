@@ -1,37 +1,22 @@
+require_relative 'config/bootstrap'
 require_relative 'module/options'
 require_relative 'module/take_input'
-require_relative 'classes/book'
-require_relative 'classes/teacher'
-require_relative 'classes/student'
-require_relative 'classes/rental'
+require_relative 'models/book'
+require_relative 'models/teacher'
+require_relative 'models/student'
+require_relative 'models/rental'
 
 class App
-  attr_reader :books, :people, :rentals
+  include Bootstrap
 
   include Options
 
   include TakeInput
 
-  def initialize(person_controller, rental_controller)
-    @people = []
-    @rentals = []
-
-    @person_controller = person_controller
-    @rental_controller = rental_controller
-  end
-
-  def list_books
-    @book_controller.list
-  end
-
   def create_book
     title = take_input_with_label('Title')
     author = take_input_with_label('Author')
-    @book_controller.create(self, Book.new(title, author))
-  end
-
-  def list_people
-    @person_controller.list(@people)
+    Bootstrap::BOOK_CONTROLLER.create(Book.new(title, author))
   end
 
   def create_person(option)
@@ -41,10 +26,10 @@ class App
     case option
     when 1
       specialization = take_input_with_label('Specialization')
-      @person_controller.create(self, Teacher.new(specialization, age, name), 'Teacher Created Successfully')
+      Bootstrap::PERSON_CONTROLLER.create(Teacher.new(specialization, age, name), 'Teacher Created Successfully')
     when 2
       permission = %w[y Y].include?(take_input_with_label('Has parent permission? [Y/N]'))
-      @person_controller.create(self, Student.new(age, name, permission), 'Student Created Successfully')
+      Bootstrap::PERSON_CONTROLLER.create(Student.new(age, name, permission), 'Student Created Successfully')
     end
   end
 
@@ -52,19 +37,21 @@ class App
     case type
     when 'book'
       puts "\nSelect a book from the following list by number"
-      puts @book_controller.list(@books)
+      puts Bootstrap::BOOK_CONTROLLER.print
+      books = Bootstrap::BOOK_CONTROLLER.list
       book = take_input_with_label('Book number').to_i
-      return puts 'Invalid book selection!' unless book.between?(1, @books.length)
+      return puts 'Invalid book selection!' unless book.between?(1, books.length)
 
-      @books[book - 1]
+      books[book - 1]
 
     when 'person'
       puts "\nSelect a person from the following list by number (not ID)"
-      puts @person_controller.list(@people, indexed: true)
+      puts Bootstrap::PERSON_CONTROLLER.print(indexed: true)
+      people = Bootstrap::PERSON_CONTROLLER.list
       person = take_input_with_label('Person number').to_i
-      return puts 'Invalid person selection!' unless person.between?(1, @people.length)
+      return puts 'Invalid person selection!' unless person.between?(1, people.length)
 
-      @people[person - 1]
+      people[person - 1]
 
     else
       puts 'Invalid function call'
