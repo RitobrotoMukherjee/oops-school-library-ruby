@@ -14,11 +14,11 @@ class BaseController < Base
     puts "\nCannot Print Data"
   end
 
-  def create
-    puts "\nNothing to create"
+  def list
+    puts "\nData list is empty"
   end
 
-  def list
-    puts "\nData is empty"
+  def save
+    puts "\nCannot save to #{@file_name}"
   end
 end

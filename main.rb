@@ -9,14 +9,13 @@ def main(app)
   while input != 7
     app.main_options
     input = app.take_input(Bootstrap::MAIN_MENU_RANGE)
-
     case input
 
     when 1
-      puts "\n#{Bootstrap::BOOK_CONTROLLER.print}"
+      puts "\n#{Bootstrap::BOOK_CONTROLLER.print(app.books)}"
 
     when 2
-      puts "\n#{Bootstrap::PERSON_CONTROLLER.print}"
+      puts "\n#{Bootstrap::PERSON_CONTROLLER.print(app.people)}"
 
     when 3
       app.person_get_option
@@ -25,17 +24,18 @@ def main(app)
       puts option if option.is_a? String
     when 4
       app.create_book
-    # when 5
-    #   app.create_rental if app.rentable?
-
-    # when 6
-    #   RENTAL_CONTROLLER.list
+    when 5
+      app.create_rental if Bootstrap::RENTAL_CONTROLLER.rentable?
+    when 6
+      app.print_rentals
     else
       puts input unless input == 7
     end
   end
-
-  return puts "\nGoodBye" if input == 7
+  if input == 7
+    app.save_data
+    return puts "\nGoodBye"
+  end
 end
 
 app = App.new

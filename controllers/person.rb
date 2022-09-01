@@ -1,15 +1,16 @@
 require_relative 'base_controller'
 require_relative '../models/teacher'
+require_relative '../models/student'
 
 class PersonController < BaseController
-  def print(indexed: false)
-    people = @iostream.read(@file_name)
+  def print(people, indexed: false)
     return 'No person had been added to the library' unless people.any?
 
     text = ''
 
     people.each.with_index(1) do |person, i|
-      data = "[#{person['type']}] Name: #{person['name']}, ID: #{person['id']}, Age: #{person['age']}"
+      type = person.is_a?(Teacher) ? 'Teacher' : 'Student'
+      data = "[#{type}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
 
       text += "\n#{i}) #{data}" if indexed
       text += "\n#{data}" unless indexed
@@ -18,26 +19,30 @@ class PersonController < BaseController
     text
   end
 
-  def create(person, message = '')
-    people = @iostream.read(@file_name)
-    obj = { id: person.id, name: person.name, age: person.age, type: 'Student' }
-
-    if person.is_a?(Teacher)
-      obj['type'] = 'Teacher'
-      obj['specialization'] = person.specialization
-    else
-      obj['permission'] = person.permission
+  def list
+    @iostream.read(@file_name).map do |person|
+      obj = nil
+      if person['type'] == 'student'
+        obj = Student.new(person['age'], person['name'], person['permission'])
+      else
+        obj = Teacher.new(person['specialization'], person['age'], person['name'])
+      end
+      obj.id = person['id']
+      obj
     end
-
-    people << obj
-    @iostream.write(@file_name, people)
-    puts message
   end
 
-  def list
-    data_list = @iostream.read(@file_name)
-    return 'No person added to the library' unless data_list.any?
-
-    data_list
+  def save(people)
+    save_obj = people.map do |person|
+      obj = { id: person.id, name: person.name, age: person.age, type: 'student' }
+      if person.is_a?(Teacher)
+        obj[:type] = 'teacher'
+        obj[:specialization] = person.specialization
+      else
+        obj[:permission] = person.permission
+      end
+      obj
+    end
+    @iostream.write(@file_name, save_obj)
   end
 end
