@@ -3,8 +3,7 @@ require_relative '../models/student'
 describe Student do
   # Arrange
   before :each do
-    mock = { students: [] }
-    @student = Student.new 30, 'Rito', false, mock
+    @student = Student.new 30, 'Rito', false
   end
 
   describe '#new' do
@@ -26,7 +25,7 @@ describe Student do
   end
 
   it 'classroom should be nil' do
-    expect(@student.classroom).to_not be_nil
+    expect(@student.classroom).to be_nil
   end
 
   describe '#play_hooky' do
