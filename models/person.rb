@@ -1,7 +1,7 @@
 require_relative '../interfaces/nameable'
 
 class Person < Nameable
-  attr_reader :id, :rentals
+  attr_reader :id, :rentals, :permission
 
   attr_accessor :name, :age
 

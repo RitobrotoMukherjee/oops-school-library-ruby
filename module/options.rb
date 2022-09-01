@@ -1,8 +1,4 @@
 module Options
-  MAIN_MENU_RANGE = (1..7).freeze
-
-  PEOPLE_MENU_RANGE = (1..2).freeze
-
   def main_options
     puts "\n\nPlease choose an option by entering a number:"
     puts '1 - List all books'

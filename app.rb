@@ -1,39 +1,31 @@
+require_relative 'config/bootstrap'
 require_relative 'module/options'
 require_relative 'module/take_input'
-require_relative 'classes/book'
-require_relative 'classes/teacher'
-require_relative 'classes/student'
-require_relative 'classes/rental'
+require_relative 'models/book'
+require_relative 'models/teacher'
+require_relative 'models/student'
+require_relative 'models/rental'
 
 class App
   attr_reader :books, :people, :rentals
+
+  include Bootstrap
 
   include Options
 
   include TakeInput
 
-  def initialize(book_controller, person_controller, rental_controller)
-    @people = []
-    @books = []
-    @rentals = []
-
-    @book_controller = book_controller
-    @person_controller = person_controller
-    @rental_controller = rental_controller
-  end
-
-  def list_books
-    @book_controller.list(@books)
+  def initialize
+    @books = Bootstrap::BOOK_CONTROLLER.list
+    @people = Bootstrap::PERSON_CONTROLLER.list
+    @rentals = Bootstrap::RENTAL_CONTROLLER.list(@books, @people)
   end
 
   def create_book
     title = take_input_with_label('Title')
     author = take_input_with_label('Author')
-    @book_controller.create(self, Book.new(title, author))
-  end
-
-  def list_people
-    @person_controller.list(@people)
+    @books << Book.new(title, author)
+    puts 'Book Created Successfully'
   end
 
   def create_person(option)
@@ -43,18 +35,30 @@ class App
     case option
     when 1
       specialization = take_input_with_label('Specialization')
-      @person_controller.create(self, Teacher.new(specialization, age, name), 'Teacher Created Successfully')
+      @people << Teacher.new(specialization, age, name)
+      puts 'Teacher Created Successfully'
     when 2
       permission = %w[y Y].include?(take_input_with_label('Has parent permission? [Y/N]'))
-      @person_controller.create(self, Student.new(age, name, permission), 'Student Created Successfully')
+      @people << Student.new(age, name, permission)
+      puts 'Student Created Successfully'
     end
+  end
+
+  def create_rental
+    book = take_rental_options('book')
+    person = take_rental_options('person')
+
+    puts 'Enter a date'
+    date = take_input_with_label('Date, "DD-MM-YYYY"')
+    @rentals << Rental.new(date, person, book)
+    puts 'Rental Created Successfully'
   end
 
   def take_rental_options(type)
     case type
     when 'book'
       puts "\nSelect a book from the following list by number"
-      puts @book_controller.list(@books)
+      puts Bootstrap::BOOK_CONTROLLER.print(@books)
       book = take_input_with_label('Book number').to_i
       return puts 'Invalid book selection!' unless book.between?(1, @books.length)
 
@@ -62,7 +66,7 @@ class App
 
     when 'person'
       puts "\nSelect a person from the following list by number (not ID)"
-      puts @person_controller.list(@people, indexed: true)
+      puts Bootstrap::PERSON_CONTROLLER.print(@people, indexed: true)
       person = take_input_with_label('Person number').to_i
       return puts 'Invalid person selection!' unless person.between?(1, @people.length)
 
@@ -73,24 +77,17 @@ class App
     end
   end
 
-  def create_rental
-    book = take_rental_options('book')
-    person = take_rental_options('person')
-
-    puts 'Enter a date'
-    date = take_input_with_label('Date, "DD-MM-YYYY"')
-    @rental_controller.create(self, Rental.new(date, person, book))
-  end
-
-  def rentable?
-    @rental_controller.rentable?(@books, @people)
-  end
-
   def print_rentals
     return puts 'No rentals available to check. First create a Rental' if @rentals.empty?
 
     puts 'Enter Person ID to find rentals:'
     person_id = take_input_with_label('Person ID').to_i
-    @rental_controller.list(@rentals, @people, person_id)
+    Bootstrap::RENTAL_CONTROLLER.print(person_id, @people)
+  end
+
+  def save_data
+    Bootstrap::BOOK_CONTROLLER.save(@books)
+    Bootstrap::PERSON_CONTROLLER.save(@people)
+    Bootstrap::RENTAL_CONTROLLER.save(@rentals)
   end
 end
