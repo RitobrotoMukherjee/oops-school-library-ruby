@@ -21,12 +21,11 @@ class PersonController < BaseController
 
   def list
     @iostream.read(@file_name).map do |person|
-      obj = nil
-      if person['type'] == 'student'
-        obj = Student.new(person['age'], person['name'], person['permission'])
-      else
-        obj = Teacher.new(person['specialization'], person['age'], person['name'])
-      end
+      obj = if person['type'] == 'student'
+              Student.new(person['age'], person['name'], person['permission'])
+            else
+              Teacher.new(person['specialization'], person['age'], person['name'])
+            end
       obj.id = person['id']
       obj
     end

@@ -4,7 +4,7 @@ require_relative 'base_controller'
 class BookController < BaseController
   def print(books)
     return 'No books added to the library' unless books.any?
-    
+
     text = ''
     books.each.with_index(1) do |book, i|
       text += "\n#{i}) Title: \"#{book.title}\" Author: #{book.author}"
@@ -13,11 +13,15 @@ class BookController < BaseController
   end
 
   def list
-    @iostream.read(@file_name).map { |book| Book.new(book['title'], book['author']) }
+    @iostream.read(@file_name).map do |book|
+      obj = Book.new(book['title'], book['author'])
+      obj.id = book['id']
+      obj
+    end
   end
 
   def save(books)
-    save_obj = books.map { |book| { title: book.title, author: book.author } }
+    save_obj = books.map { |book| { id: book.id, title: book.title, author: book.author } }
     @iostream.write(@file_name, save_obj)
   end
 end

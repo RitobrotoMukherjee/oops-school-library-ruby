@@ -1,4 +1,5 @@
 # rubocop:disable Metrics/CyclomaticComplexity
+# rubocop:disable Metrics/PerceivedComplexity
 # rubocop:disable Metrics/MethodLength
 
 require_relative 'app'
@@ -25,17 +26,17 @@ def main(app)
     when 4
       app.create_book
     when 5
-      app.create_rental if Bootstrap::RENTAL_CONTROLLER.rentable?
+      app.create_rental if Bootstrap::RENTAL_CONTROLLER.rentable?(app.people, app.books)
     when 6
       app.print_rentals
     else
       puts input unless input == 7
     end
   end
-  if input == 7
-    app.save_data
-    return puts "\nGoodBye"
-  end
+  return unless input == 7
+
+  app.save_data
+  puts "\nGoodBye"
 end
 
 app = App.new
@@ -43,4 +44,5 @@ app = App.new
 main app
 
 # rubocop:enable Metrics/CyclomaticComplexity
+# rubocop:enable Metrics/PerceivedComplexity
 # rubocop:enable Metrics/MethodLength

@@ -7,7 +7,7 @@ require_relative 'models/student'
 require_relative 'models/rental'
 
 class App
-  attr_reader :books, :people
+  attr_reader :books, :people, :rentals
 
   include Bootstrap
 
@@ -18,6 +18,7 @@ class App
   def initialize
     @books = Bootstrap::BOOK_CONTROLLER.list
     @people = Bootstrap::PERSON_CONTROLLER.list
+    @rentals = Bootstrap::RENTAL_CONTROLLER.list(@books, @people)
   end
 
   def create_book
@@ -49,14 +50,15 @@ class App
 
     puts 'Enter a date'
     date = take_input_with_label('Date, "DD-MM-YYYY"')
-    Bootstrap::RENTAL_CONTROLLER.create(Rental.new(date, person, book))
+    @rentals << Rental.new(date, person, book)
+    puts 'Rental Created Successfully'
   end
 
   def take_rental_options(type)
     case type
     when 'book'
       puts "\nSelect a book from the following list by number"
-      puts Bootstrap::BOOK_CONTROLLER.print
+      puts Bootstrap::BOOK_CONTROLLER.print(@books)
       book = take_input_with_label('Book number').to_i
       return puts 'Invalid book selection!' unless book.between?(1, @books.length)
 
@@ -64,7 +66,7 @@ class App
 
     when 'person'
       puts "\nSelect a person from the following list by number (not ID)"
-      puts Bootstrap::PERSON_CONTROLLER.print(indexed: true)
+      puts Bootstrap::PERSON_CONTROLLER.print(@people, indexed: true)
       person = take_input_with_label('Person number').to_i
       return puts 'Invalid person selection!' unless person.between?(1, @people.length)
 
@@ -76,15 +78,16 @@ class App
   end
 
   def print_rentals
-    return puts 'No rentals available to check. First create a Rental' unless Bootstrap::RENTAL_CONTROLLER.printable?
+    return puts 'No rentals available to check. First create a Rental' if @rentals.empty?
 
     puts 'Enter Person ID to find rentals:'
     person_id = take_input_with_label('Person ID').to_i
-    Bootstrap::RENTAL_CONTROLLER.print(person_id)
+    Bootstrap::RENTAL_CONTROLLER.print(person_id, @people)
   end
 
   def save_data
     Bootstrap::BOOK_CONTROLLER.save(@books)
     Bootstrap::PERSON_CONTROLLER.save(@people)
+    Bootstrap::RENTAL_CONTROLLER.save(@rentals)
   end
 end
