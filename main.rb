@@ -1,5 +1,4 @@
 # rubocop:disable Metrics/CyclomaticComplexity
-# rubocop:disable Metrics/PerceivedComplexity
 # rubocop:disable Metrics/MethodLength
 
 require_relative 'app'
@@ -33,7 +32,6 @@ def main(app)
       puts input unless input == 7
     end
   end
-  return unless input == 7
 
   app.save_data
   puts "\nGoodBye"
@@ -44,5 +42,4 @@ app = App.new
 main app
 
 # rubocop:enable Metrics/CyclomaticComplexity
-# rubocop:enable Metrics/PerceivedComplexity
 # rubocop:enable Metrics/MethodLength
