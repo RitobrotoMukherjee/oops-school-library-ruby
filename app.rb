@@ -21,11 +21,44 @@ class App
     @rentals = Bootstrap::RENTAL_CONTROLLER.list(@books, @people)
   end
 
+  def exception_check_input(input)
+    puts input unless input == 7
+  end
+
+  def perform_main_operation(input)
+    case input
+
+    when 1
+      puts "\n#{Bootstrap::BOOK_CONTROLLER.print(@books)}"
+
+    when 2
+      puts "\n#{Bootstrap::PERSON_CONTROLLER.print(@people)}"
+
+    when 3
+      clean_input_to_create_a_person
+    when 4
+      create_book
+    when 5
+      create_rental
+    when 6
+      print_rentals
+    else
+      exception_check_input(input)
+    end
+  end
+
   def create_book
     title = take_input_with_label('Title')
     author = take_input_with_label('Author')
     @books << Book.new(title, author)
     puts 'Book Created Successfully'
+  end
+
+  def clean_input_to_create_a_person
+    person_get_option
+    option = take_input(Bootstrap::PEOPLE_MENU_RANGE, 'Cannot create person')
+    create_person(option) unless option.is_a? String
+    puts option if option.is_a? String
   end
 
   def create_person(option)
@@ -45,6 +78,8 @@ class App
   end
 
   def create_rental
+    return unless Bootstrap::RENTAL_CONTROLLER.rentable?(@people, @books)
+
     book = take_rental_options('book')
     person = take_rental_options('person')
 
